@@ -2,8 +2,10 @@ package com.yhy.evtor.simple;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.yhy.evtor.Evtor;
@@ -16,33 +18,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Evtor.get().register(this);
+        Evtor.evtor().register(this);
 
-        new Handler().postDelayed(new Runnable() {
+        new Thread() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "跳转登录页面", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                }, 3000);
             }
-        }, 3000);
+        }.start();
     }
 
     @Subscribe("login")
     public void onLogin() {
-        Toast.makeText(this, "空参数Login’", Toast.LENGTH_SHORT).show();
+        log("空参数Login");
     }
 
     @Subscribe("register")
-    public void onRegister(String userId) {
-        Toast.makeText(this, "onRegister : " + userId, Toast.LENGTH_SHORT).show();
+    public void onRegister(String data) {
+        log("onRegister : " + data);
+    }
+
+    @Subscribe("register")
+    public void onRegister2(String data) {
+        log("onRegister2 : " + data);
     }
 
     @Subscribe({"login", "register", "update"})
-    public void onUpdate(String subscriber, String nickname) {
-        Toast.makeText(this, "update : " + subscriber + " : " + nickname, Toast.LENGTH_SHORT).show();
+    public void onUpdate(String subscriber, String data) {
+        log("update : " + subscriber + " : " + data);
     }
 
     @Subscribe
     public void onLogout() {
-        Toast.makeText(this, "空参数onLogout’", Toast.LENGTH_SHORT).show();
+        log("空参数onLogout");
+    }
+
+    private void log(String log) {
+        Log.i(getClass().getSimpleName(), log);
     }
 }

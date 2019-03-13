@@ -1,4 +1,4 @@
-package com.yhy.evtor.manager;
+package com.yhy.evtor.subscribe;
 
 import java.lang.reflect.Method;
 
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * desc   :
  */
 public class SubscriberMethod {
-    private Method method;
+    public Method method;
 
     public SubscriberMethod(Method method) {
         this.method = method;
