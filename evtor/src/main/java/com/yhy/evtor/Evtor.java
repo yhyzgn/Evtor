@@ -1,7 +1,7 @@
 package com.yhy.evtor;
 
 import com.yhy.evtor.cache.Caches;
-import com.yhy.evtor.emitter.EvtorEmitter;
+import com.yhy.evtor.emitter.Emitter;
 import com.yhy.evtor.manager.ObserverManager;
 
 /**
@@ -41,11 +41,11 @@ public class Evtor {
         ObserverManager.manager().cancel(observer);
     }
 
-    public EvtorEmitter evt() {
-        return evt(Caches.caches().getSubscriberGlobal());
+    public Emitter subscribe() {
+        return subscribe(Caches.caches().getSubscriberGlobal());
     }
 
-    public EvtorEmitter evt(String subscriber) {
-        return EvtorEmitter.create(subscriber);
+    public Emitter subscribe(String subscriber) {
+        return Caches.caches().getEmitter(subscriber);
     }
 }

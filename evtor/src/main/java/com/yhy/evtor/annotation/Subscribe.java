@@ -21,4 +21,6 @@ import java.lang.annotation.Target;
 public @interface Subscribe {
 
     String[] value() default {};
+
+    boolean broadcast() default false;
 }

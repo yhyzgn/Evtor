@@ -60,7 +60,13 @@ public class ObserverManager {
                         Caches.caches().removeSubscriberMethod(subscriber, clazz);
                     }
                 } else {
-                    Caches.caches().removeSubscriberMethod(Caches.caches().getSubscriberGlobal(), clazz);
+                    if (subscribe.broadcast()) {
+                        // 注销全局广播事件
+                        Caches.caches().removeBroadcastSubscriberMethod(clazz);
+                    } else {
+                        // 未指定订阅者名称，默认以方法名为名称
+                        Caches.caches().removeSubscriberMethod(method.getName(), clazz);
+                    }
                 }
             }
         }
@@ -83,11 +89,15 @@ public class ObserverManager {
                         Caches.caches().addSubscriberMethod(subscriber, clazz, subscriberMethod);
                     }
                 } else {
-                    // 全局事件
-                    // 如果没有指定事件订阅者，则将方法添加到全局事件订阅
-                    addSubscription(Caches.caches().getSubscriberGlobal(), subscriptionSet, subscriberMethod);
-                    // 添加事件到订阅者映射关系map中
-                    Caches.caches().addSubscriberMethod(Caches.caches().getSubscriberGlobal(), clazz, subscriberMethod);
+                    if (subscribe.broadcast()) {
+                        // 添加全局的广播事件
+                        Caches.caches().addBroadcastSubscriberMethod(clazz, subscriberMethod);
+                    } else {
+                        // 未指定订阅者名称，默认以方法名为名称
+                        addSubscription(method.getName(), subscriptionSet, subscriberMethod);
+                        // 添加事件到订阅者映射关系map中
+                        Caches.caches().addSubscriberMethod(method.getName(), clazz, subscriberMethod);
+                    }
                 }
             }
         }

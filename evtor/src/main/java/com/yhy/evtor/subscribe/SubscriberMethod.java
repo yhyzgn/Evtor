@@ -14,5 +14,6 @@ public class SubscriberMethod {
 
     public SubscriberMethod(Method method) {
         this.method = method;
+        this.method.setAccessible(true);
     }
 }
