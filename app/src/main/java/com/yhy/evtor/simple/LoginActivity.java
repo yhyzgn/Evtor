@@ -31,8 +31,8 @@ public class LoginActivity extends AppCompatActivity {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        Evtor.evtor().subscribe("register").emit("听说注册成功了。。");
-                        Evtor.evtor().subscribe("register").emit();
+                        Evtor.evtor().subscribe("register").emit("听说注册成功了。。");
+//                        Evtor.evtor().subscribe("register").emit();
                     }
                 }, 2000);
             }

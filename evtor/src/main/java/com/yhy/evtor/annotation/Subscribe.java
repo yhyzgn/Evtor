@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * e-mail : yhyzgn@gmail.com
  * time   : 2019-03-13 22:04
  * version: 1.0.0
- * desc   :
+ * desc   : 订阅事件接受者
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -20,7 +20,21 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Subscribe {
 
+    /**
+     * 订阅者..们的名称..们
+     *
+     * @return 订阅者..们的名称..们
+     */
     String[] value() default {};
 
+    /**
+     * 是否是全局广播事件
+     * <p>
+     * 默认为 false
+     * <p>
+     * 如果订阅为广播事件的话，value 值将被忽略
+     *
+     * @return 是否是广播事件
+     */
     boolean broadcast() default false;
 }

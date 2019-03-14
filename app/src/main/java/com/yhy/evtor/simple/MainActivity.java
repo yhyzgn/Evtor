@@ -1,10 +1,10 @@
 package com.yhy.evtor.simple;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,8 +55,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
+    public void register() {
+        log("以方法名为订阅者，哈哈哈");
+    }
+
+    @Subscribe
     public void onLogout() {
         log("空参数onLogout");
+    }
+
+    @Subscribe(broadcast = true)
+    public void global() {
+        log("这是一个无参数全局方法");
+    }
+
+    @Subscribe(broadcast = true)
+    public void global(String data) {
+        log("有参数全局方法，data = " + data);
+    }
+
+    @Subscribe(broadcast = true)
+    public void global(String subscriber, String data) {
+        log("有两个参数全局方法，subscriber = " + subscriber + "，data = " + data);
     }
 
     private void log(String log) {
