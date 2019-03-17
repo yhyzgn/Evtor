@@ -1,9 +1,13 @@
 package com.yhy.evtor.cache;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.yhy.evtor.emitter.Emitter;
 import com.yhy.evtor.subscribe.SubscriberMethod;
 import com.yhy.evtor.subscribe.Subscription;
 
+import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -20,10 +24,12 @@ import java.util.Set;
 public class Caches {
     private static volatile Caches caches;
 
+    // 事件处理器
+    private Handler mHandler;
     // 全局订阅者
     private static final String SUBSCRIBER_BROADCAST = "subscriber-broadcast";
     // 类与观察者对象的映射
-    private Map<Class<?>, Object> mClassObserverMap;
+    private Map<Class<?>, WeakReference<Object>> mClassObserverMap;
     // 事件注册的类与事件订阅者关系map
     private Map<Class<?>, Set<Subscription>> mClassSubscriptionMap;
     // 订阅者名称与类和事件方法的映射map
@@ -35,6 +41,7 @@ public class Caches {
         if (null != caches) {
             throw new UnsupportedOperationException("Singleton class can not be instantiated.");
         }
+        mHandler = new Handler(Looper.getMainLooper());
         mClassObserverMap = new LinkedHashMap<>();
         mClassSubscriptionMap = new LinkedHashMap<>();
         mSubscriberMethodMap = new LinkedHashMap<>();
@@ -58,6 +65,15 @@ public class Caches {
     }
 
     /**
+     * 获取事件处理器
+     *
+     * @return 事件处理器
+     */
+    public Handler getHandler() {
+        return mHandler;
+    }
+
+    /**
      * 获取全局广播事件订阅者名称
      *
      * @return 广播事件订阅者名称
@@ -72,7 +88,7 @@ public class Caches {
      * @param observer 观察者
      */
     public void register(Object observer) {
-        mClassObserverMap.put(observer.getClass(), observer);
+        mClassObserverMap.put(observer.getClass(), new WeakReference<>(observer));
     }
 
     /**
@@ -91,7 +107,8 @@ public class Caches {
      * @return 观察者对象
      */
     public Object getObserver(Class<?> clazz) {
-        return mClassObserverMap.get(clazz);
+        WeakReference<Object> reference = mClassObserverMap.get(clazz);
+        return null != reference ? reference.get() : null;
     }
 
     /**

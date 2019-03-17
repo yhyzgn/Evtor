@@ -1,8 +1,5 @@
 package com.yhy.evtor.emitter;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.yhy.evtor.cache.Caches;
 import com.yhy.evtor.subscribe.SubscriberMethod;
 
@@ -18,11 +15,9 @@ import java.util.Set;
  * desc   : 事件发射器
  */
 public class Emitter {
-    private Handler mHandler;
     private String mSubscriber;
 
     private Emitter(String subscriber) {
-        mHandler = new Handler(Looper.getMainLooper());
         mSubscriber = subscriber;
     }
 
@@ -51,7 +46,7 @@ public class Emitter {
      * @param data 需要传递的数据
      */
     public void emit(final Object data) {
-        mHandler.post(new Runnable() {
+        Caches.caches().getHandler().post(new Runnable() {
             @Override
             public void run() {
                 // 1、订阅者被指定为专门订阅某个事件，
@@ -82,6 +77,7 @@ public class Emitter {
                     clazz = et.getKey();
                     methodSet = et.getValue();
                     observer = Caches.caches().getObserver(clazz);
+                    if (null == observer) continue;
                     for (SubscriberMethod method : methodSet) {
                         // 触发事件
                         emit(method, observer);
