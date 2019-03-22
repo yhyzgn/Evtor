@@ -49,10 +49,10 @@ public class ObserverManager {
      *
      * @param observer 观察者，一般为this
      */
-    public void register(Object observer) {
+    public void observe(Object observer) {
         Class<?> clazz = observer.getClass();
         // 缓存当前观察者
-        Caches.caches().register(observer);
+        Caches.caches().observe(observer);
         // 扫描订阅者..们
         scanSubscriber(clazz, getSubscriptionSet(clazz));
     }

@@ -87,7 +87,7 @@ public class Caches {
      *
      * @param observer 观察者
      */
-    public void register(Object observer) {
+    public void observe(Object observer) {
         mClassObserverMap.put(observer.getClass(), new WeakReference<>(observer));
     }
 

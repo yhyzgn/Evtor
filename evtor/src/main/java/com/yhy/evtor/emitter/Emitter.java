@@ -97,14 +97,14 @@ public class Emitter {
                 if (paramCount == 0) {
                     // 当前方法不需要参数
                     method.method.invoke(observer);
-                } else if (paramCount == 1) {
+                } else if (paramCount == 1 && null != data) {
                     // 需要一个参数来接收事件数据
                     method.method.invoke(observer, data);
-                } else if ((method.broadcast || method.subscriberList.size() > 1) && paramCount == 2) {
+                } else if ((method.broadcast || method.subscriberList.size() > 1) && paramCount == 2 && null != data) {
                     // 如果是广播事件，或者订阅者指定为多个时，才允许有两个参数的订阅者方法
                     // 需要一个参数来接收订阅者名称，另一个参数来接收事件数据
                     method.method.invoke(observer, mSubscriber, data);
-                } else {
+                } else if (null != data) {
                     // 此类订阅者不支持多参数
                     throw new IllegalArgumentException("The arguments of evtor emitter subscriber is illegal, maybe too many arguments, check it please.");
                 }

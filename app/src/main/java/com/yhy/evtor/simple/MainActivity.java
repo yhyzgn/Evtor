@@ -2,84 +2,92 @@ package com.yhy.evtor.simple;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import com.yhy.evtor.Evtor;
 import com.yhy.evtor.annotation.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView tvEvtor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Evtor.evtor().register(this);
+        Evtor.evtor().observe(this);
 
-        new Thread() {
+        tvEvtor = findViewById(R.id.tv_evtor);
+        tvEvtor.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "跳转登录页面", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    }
-                }, 3000);
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, EvtorActivity.class);
+                startActivity(intent);
             }
-        }.start();
+        });
     }
 
-    @Subscribe("login")
-    public void onLogin() {
-        log("空参数Login");
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Evtor.evtor().cancel(this);
     }
 
-    @Subscribe("register")
-    public void onRegister(String data) {
-        log("onRegister : " + data);
+    @Subscribe("single")
+    public void single() {
+        log("单一订阅 ——　无数据");
     }
 
-    @Subscribe("register")
-    public void onRegister2(String data) {
-        log("onRegister2 : " + data);
-    }
-
-    @Subscribe({"login", "register", "update"})
-    public void onUpdate(String subscriber, String data) {
-        log("update : " + subscriber + " : " + data);
+    @Subscribe("single")
+    public void single(String data) {
+        log("单一订阅 ——　有数据：" + data);
     }
 
     @Subscribe
-    public void register() {
-        log("以方法名为订阅者，哈哈哈");
+    public void defSingle() {
+        log("默认单一订阅 ——　无数据");
     }
 
     @Subscribe
-    public void onLogout() {
-        log("空参数onLogout");
+    public void defSingle(String data) {
+        log("默认单一订阅 ——　有数据：" + data);
+    }
+
+    @Subscribe({"multi-1", "multi-2"})
+    public void multi() {
+        log("多订阅 ——　无数据");
+    }
+
+    @Subscribe({"multi-1", "multi-2"})
+    public void multi(String data) {
+        log("多订阅 ——　有数据：" + data);
+    }
+
+    @Subscribe({"multi-1", "multi-2"})
+    public void multi(String subscriber, String data) {
+        log("多订阅 ——　订阅者：" + subscriber + "，有数据：" + data);
     }
 
     @Subscribe(broadcast = true)
-    public void global() {
-        log("这是一个无参数全局方法");
+    public void broadcast() {
+        log("广播订阅 ——　无数据");
     }
 
     @Subscribe(broadcast = true)
-    public void global(String data) {
-        log("有参数全局方法，data = " + data);
+    public void broadcast(String data) {
+        log("广播订阅 ——　有数据：" + data);
     }
 
     @Subscribe(broadcast = true)
-    public void global(String subscriber, String data) {
-        log("有两个参数全局方法，subscriber = " + subscriber + "，data = " + data);
+    public void broadcast(String subscriber, String data) {
+        log("广播订阅 ——　订阅者：" + subscriber + "，有数据：" + data);
     }
 
-    private void log(String log) {
-        Log.i(getClass().getSimpleName(), log);
+    private void log(String text) {
+        Log.i(getClass().getSimpleName(), text);
     }
 }
