@@ -122,6 +122,33 @@
         }
         ```
 
+    *   广播订阅者
+
+        >   注解时需要指定为广播
+        >
+        >   能接收到所有的事件
+        >
+        >   **最多接收两个参数**
+        >
+        >   **参数接收规则与“多订阅者”相同**
+
+        ```java
+        @Subscribe(broadcast = true)
+        public void broadcast() {
+            log("广播订阅 ——　无数据");
+        }
+        
+        @Subscribe(broadcast = true)
+        public void broadcast(String data) {
+            log("广播订阅 ——　有数据：" + data);
+        }
+        
+        @Subscribe(broadcast = true)
+        public void broadcast(String subscriber, String data) {
+            log("广播订阅 ——　订阅者：" + subscriber + "，有数据：" + data);
+        }
+        ```
+
 *   触发事件，并传递数据
 
     >   可以在子线程中发送事件，所有事件均处理到了主线程
