@@ -45,7 +45,7 @@ publish {
     userOrg = 'yhyzgn'
     groupId = 'com.yhy.event'
     artifactId = 'evtor'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.2'
     desc = 'Event bus which easy to repid development.'
     website = 'https://github.com/yhyzgn/Evtor'
 }

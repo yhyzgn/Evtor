@@ -42,8 +42,8 @@ public class Evtor {
      *
      * @param observer 事件观察者
      */
-    public void register(Object observer) {
-        ObserverManager.manager().register(observer);
+    public void observe(Object observer) {
+        ObserverManager.manager().observe(observer);
     }
 
     /**
@@ -56,7 +56,7 @@ public class Evtor {
     }
 
     /**
-     * 获取事件发射器
+     * 获取广播事件发射器
      *
      * @return 事件发射器
      */
@@ -65,7 +65,7 @@ public class Evtor {
     }
 
     /**
-     * 获取事件发射器
+     * 获取订阅者事件发射器
      *
      * @param subscriber 接收事件的订阅者名称
      * @return 事件发射器
