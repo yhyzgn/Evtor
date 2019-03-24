@@ -1,6 +1,6 @@
 # Evtor
 
-![Evtor](https://img.shields.io/badge/Evtor-1.0.3-brightgreen.svg)
+![Evtor](https://img.shields.io/badge/Evtor-1.0.2-brightgreen.svg)
 
 >   一个简洁的事件总线框架。能订阅特定事件和广播事件，数据传递等。
 >
