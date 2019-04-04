@@ -1,10 +1,12 @@
 # Evtor
 
-![Evtor](https://img.shields.io/badge/Evtor-1.0.3-brightgreen.svg)
+![Evtor](https://img.shields.io/badge/Evtor-1.1.0-brightgreen.svg) [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu) [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
 >   一个简洁的事件总线框架。能订阅特定事件和广播事件，数据传递等。
 >
 >   比[`ObsEvent`](https://github.com/yhyzgn/ObsEvent.git)便捷，不用实现接口，秩序简单的注解订阅就能接收到事件。
+>
+>   **支持`AndroidX`**
 
 ### 效果图
 
