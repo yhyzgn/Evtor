@@ -1,6 +1,6 @@
 # Evtor
 
-![Evtor](https://img.shields.io/badge/Evtor-1.1.0-brightgreen.svg) [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu) [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+![](https://jitpack.io/v/yhyzgn/Evtor.svg) [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu) [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
 >   一个简洁的事件总线框架。能订阅特定事件和广播事件，数据传递等。
 >
@@ -24,11 +24,24 @@
 
 ### 使用方法
 
+* 引入`jitpack`
+
+  > 仓库已迁移到`jitpack`
+
+  ```groovy
+  allprojects {
+      repositories {
+          // ...
+          maven { url "https://jitpack.io" }
+      }
+  }
+  ```
+
 *   在`dependencies`中添加依赖
 
     ```groovy
     dependencies {
-        implementation 'com.yhy.event:evtor:latestVersion'
+        implementation 'com.github.yhyzgn:Evtor:latestVersion'
     }
     ```
 
