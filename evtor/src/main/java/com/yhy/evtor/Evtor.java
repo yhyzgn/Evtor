@@ -61,7 +61,7 @@ public class Evtor {
      * @return 事件发射器
      */
     public Emitter subscribe() {
-        return subscribe(Caches.caches().getSubscriberBroadcast());
+        return subscribe(Caches.instance().getSubscriberBroadcast());
     }
 
     /**
@@ -71,6 +71,6 @@ public class Evtor {
      * @return 事件发射器
      */
     public Emitter subscribe(String subscriber) {
-        return Caches.caches().getEmitter(subscriber);
+        return Caches.instance().getEmitter(subscriber);
     }
 }

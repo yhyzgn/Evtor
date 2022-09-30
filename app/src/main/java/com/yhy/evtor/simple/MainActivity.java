@@ -22,12 +22,9 @@ public class MainActivity extends AppCompatActivity {
         Evtor.evtor().observe(this);
 
         tvEvtor = findViewById(R.id.tv_evtor);
-        tvEvtor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, EvtorActivity.class);
-                startActivity(intent);
-            }
+        tvEvtor.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EvtorActivity.class);
+            startActivity(intent);
         });
     }
 

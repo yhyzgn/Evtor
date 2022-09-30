@@ -22,23 +22,24 @@ import java.util.Set;
  */
 @SuppressWarnings("ConstantConditions")
 public class Caches {
-    private static volatile Caches caches;
-
-    // 事件处理器
-    private Handler mHandler;
     // 全局订阅者
     private static final String SUBSCRIBER_BROADCAST = "subscriber-broadcast";
+
+    private static volatile Caches instance;
+
+    // 事件处理器
+    private final Handler mHandler;
     // 类与观察者对象的映射
-    private Map<Class<?>, WeakReference<Object>> mClassObserverMap;
+    private final Map<Class<?>, WeakReference<Object>> mClassObserverMap;
     // 事件注册的类与事件订阅者关系map
-    private Map<Class<?>, Set<Subscription>> mClassSubscriptionMap;
+    private final Map<Class<?>, Set<Subscription>> mClassSubscriptionMap;
     // 订阅者名称与类和事件方法的映射map
-    private Map<String, Map<Class<?>, Set<SubscriberMethod>>> mSubscriberMethodMap;
+    private final Map<String, Map<Class<?>, Set<SubscriberMethod>>> mSubscriberMethodMap;
     // 保存订阅者与事件发射器
-    private Map<String, Emitter> mEmitterMap;
+    private final Map<String, Emitter> mEmitterMap;
 
     private Caches() {
-        if (null != caches) {
+        if (null != instance) {
             throw new UnsupportedOperationException("Singleton class can not be instantiated.");
         }
         mHandler = new Handler(Looper.getMainLooper());
@@ -53,15 +54,15 @@ public class Caches {
      *
      * @return 缓存对象
      */
-    public static Caches caches() {
-        if (null == caches) {
+    public static Caches instance() {
+        if (null == instance) {
             synchronized (Caches.class) {
-                if (null == caches) {
-                    caches = new Caches();
+                if (null == instance) {
+                    instance = new Caches();
                 }
             }
         }
-        return caches;
+        return instance;
     }
 
     /**
@@ -199,11 +200,6 @@ public class Caches {
      * @return 事件发射器
      */
     public Emitter getEmitter(String subscribe) {
-        Emitter emitter = mEmitterMap.get(subscribe);
-        if (null == emitter) {
-            emitter = Emitter.create(subscribe);
-            mEmitterMap.put(subscribe, emitter);
-        }
-        return emitter;
+        return mEmitterMap.computeIfAbsent(subscribe, Emitter::create);
     }
 }

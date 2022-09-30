@@ -1,11 +1,11 @@
 package com.yhy.evtor.simple;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.yhy.evtor.Evtor;
 
@@ -33,29 +33,20 @@ public class EvtorActivity extends AppCompatActivity {
         tvDefSingle = findViewById(R.id.tv_def_single);
         tvMulti = findViewById(R.id.tv_multi);
 
-        tvSingle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Evtor.evtor().subscribe("single").emit("single-data");
-                log("============================================================================================================================");
-            }
+        tvSingle.setOnClickListener(v -> {
+            Evtor.evtor().subscribe("single").emit("single-data");
+            log("============================================================================================================================");
         });
 
-        tvDefSingle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Evtor.evtor().subscribe("defSingle").emit("defSingle-data");
-                log("============================================================================================================================");
-            }
+        tvDefSingle.setOnClickListener(v -> {
+            Evtor.evtor().subscribe("defSingle").emit("defSingle-data");
+            log("============================================================================================================================");
         });
 
-        tvMulti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String subscriber = "multi-" + (new Random().nextInt(2) + 1);
-                Evtor.evtor().subscribe(subscriber).emit(subscriber + "-data");
-                log("============================================================================================================================");
-            }
+        tvMulti.setOnClickListener(v -> {
+            String subscriber = "multi-" + (new Random().nextInt(2) + 1);
+            Evtor.evtor().subscribe(subscriber).emit(subscriber + "-data");
+            log("============================================================================================================================");
         });
     }
 

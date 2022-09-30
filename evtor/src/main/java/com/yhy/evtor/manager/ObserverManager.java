@@ -52,7 +52,7 @@ public class ObserverManager {
     public void observe(Object observer) {
         Class<?> clazz = observer.getClass();
         // 缓存当前观察者
-        Caches.caches().observe(observer);
+        Caches.instance().observe(observer);
         // 扫描订阅者..们
         scanSubscriber(clazz, getSubscriptionSet(clazz));
     }
@@ -65,7 +65,7 @@ public class ObserverManager {
     public void cancel(Object observer) {
         Class<?> clazz = observer.getClass();
         // 注销缓存中关系
-        Caches.caches().cancel(observer);
+        Caches.instance().cancel(observer);
         // 注销订阅者与类和方法之间的映射关系
         Method[] methods = clazz.getDeclaredMethods();
         Subscribe subscribe;
@@ -74,15 +74,15 @@ public class ObserverManager {
             if (null != subscribe) {
                 if (subscribe.value().length > 0) {
                     for (String subscriber : subscribe.value()) {
-                        Caches.caches().removeSubscriberMethod(subscriber, clazz);
+                        Caches.instance().removeSubscriberMethod(subscriber, clazz);
                     }
                 } else {
                     if (subscribe.broadcast()) {
                         // 注销全局广播事件
-                        Caches.caches().removeBroadcastSubscriberMethod(clazz);
+                        Caches.instance().removeBroadcastSubscriberMethod(clazz);
                     } else {
                         // 未指定订阅者名称，默认以方法名为名称
-                        Caches.caches().removeSubscriberMethod(method.getName(), clazz);
+                        Caches.instance().removeSubscriberMethod(method.getName(), clazz);
                     }
                 }
             }
@@ -108,7 +108,7 @@ public class ObserverManager {
 
                 if (subscribe.broadcast()) {
                     // 添加全局的广播事件
-                    Caches.caches().addBroadcastSubscriberMethod(clazz, subscriberMethod);
+                    Caches.instance().addBroadcastSubscriberMethod(clazz, subscriberMethod);
                 } else {
                     if (subscribe.value().length > 0) {
                         // 指定事件
@@ -116,18 +116,18 @@ public class ObserverManager {
                             // 添加事件到订阅管理中
                             addSubscription(subscriber, subscriptionSet, subscriberMethod);
                             // 添加事件到订阅者映射关系map中
-                            Caches.caches().addSubscriberMethod(subscriber, clazz, subscriberMethod);
+                            Caches.instance().addSubscriberMethod(subscriber, clazz, subscriberMethod);
                         }
                     } else {
                         // 未指定订阅者名称，默认以方法名为名称
                         addSubscription(method.getName(), subscriptionSet, subscriberMethod);
                         // 添加事件到订阅者映射关系map中
-                        Caches.caches().addSubscriberMethod(method.getName(), clazz, subscriberMethod);
+                        Caches.instance().addSubscriberMethod(method.getName(), clazz, subscriberMethod);
                     }
                 }
             }
         }
-        Caches.caches().addClassAndSubscriptionSet(clazz, subscriptionSet);
+        Caches.instance().addClassAndSubscriptionSet(clazz, subscriptionSet);
     }
 
     /**
@@ -169,7 +169,7 @@ public class ObserverManager {
      * @return 对应的所有订阅者
      */
     private Set<Subscription> getSubscriptionSet(Class<?> clazz) {
-        Set<Subscription> subscriptionSet = Caches.caches().getSubscriptionSet(clazz);
+        Set<Subscription> subscriptionSet = Caches.instance().getSubscriptionSet(clazz);
         if (null == subscriptionSet) {
             subscriptionSet = new LinkedHashSet<>();
         }

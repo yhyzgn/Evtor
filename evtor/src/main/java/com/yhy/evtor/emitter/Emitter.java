@@ -15,7 +15,7 @@ import java.util.Set;
  * desc   : 事件发射器
  */
 public class Emitter {
-    private String mSubscriber;
+    private final String mSubscriber;
 
     private Emitter(String subscriber) {
         mSubscriber = subscriber;
@@ -46,15 +46,15 @@ public class Emitter {
      * @param data 需要传递的数据
      */
     public void emit(final Object data) {
-        Caches.caches().getHandler().post(new Runnable() {
+        Caches.instance().getHandler().post(new Runnable() {
             @Override
             public void run() {
                 // 1、订阅者被指定为专门订阅某个事件，
                 try {
                     // 先执行指定订阅者的事件
-                    emit(Caches.caches().getClassMethodSet(mSubscriber));
+                    emit(Caches.instance().getClassMethodSet(mSubscriber));
                     // 再执行全局广播事件
-                    emit(Caches.caches().getClassMethodSet(Caches.caches().getSubscriberBroadcast()));
+                    emit(Caches.instance().getClassMethodSet(Caches.instance().getSubscriberBroadcast()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -76,7 +76,7 @@ public class Emitter {
                 for (Map.Entry<Class<?>, Set<SubscriberMethod>> et : classMethodMap.entrySet()) {
                     clazz = et.getKey();
                     methodSet = et.getValue();
-                    observer = Caches.caches().getObserver(clazz);
+                    observer = Caches.instance().getObserver(clazz);
                     if (null == observer) continue;
                     for (SubscriberMethod method : methodSet) {
                         // 触发事件
