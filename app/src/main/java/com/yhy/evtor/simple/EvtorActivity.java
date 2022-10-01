@@ -20,32 +20,34 @@ import java.util.Random;
  */
 public class EvtorActivity extends AppCompatActivity {
 
-    private TextView tvSingle;
-    private TextView tvDefSingle;
-    private TextView tvMulti;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evtor);
 
-        tvSingle = findViewById(R.id.tv_single);
-        tvDefSingle = findViewById(R.id.tv_def_single);
-        tvMulti = findViewById(R.id.tv_multi);
+        TextView tvSingle = findViewById(R.id.tv_single);
+        TextView tvDefSingle = findViewById(R.id.tv_def_single);
+        TextView tvMulti = findViewById(R.id.tv_multi);
+        TextView tvBroadcast = findViewById(R.id.tv_broadcast);
 
         tvSingle.setOnClickListener(v -> {
-            Evtor.evtor().subscribe("single").emit("single-data");
+            Evtor.instance.subscribe("single").emit("single-data");
             log("============================================================================================================================");
         });
 
         tvDefSingle.setOnClickListener(v -> {
-            Evtor.evtor().subscribe("defSingle").emit("defSingle-data");
+            Evtor.instance.subscribe("defSingle").emit("defSingle-data");
             log("============================================================================================================================");
         });
 
         tvMulti.setOnClickListener(v -> {
             String subscriber = "multi-" + (new Random().nextInt(2) + 1);
-            Evtor.evtor().subscribe(subscriber).emit(subscriber + "-data");
+            Evtor.instance.subscribe(subscriber).emit(subscriber + "-data", "这是 data", "第三个参数");
+            log("============================================================================================================================");
+        });
+
+        tvBroadcast.setOnClickListener(v -> {
+            Evtor.instance.broadcast().emit("广播参数1", "广播参数-data", "这是 data", "第四个参数");
             log("============================================================================================================================");
         });
     }

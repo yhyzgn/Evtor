@@ -2,26 +2,24 @@ package com.yhy.evtor.simple;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.yhy.evtor.Evtor;
 import com.yhy.evtor.annotation.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvEvtor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Evtor.evtor().observe(this);
+        Evtor.instance.register(this);
 
-        tvEvtor = findViewById(R.id.tv_evtor);
+        TextView tvEvtor = findViewById(R.id.tv_evtor);
         tvEvtor.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, EvtorActivity.class);
             startActivity(intent);
@@ -31,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Evtor.evtor().cancel(this);
+        Evtor.instance.unregister(this);
     }
 
     @Subscribe("single")

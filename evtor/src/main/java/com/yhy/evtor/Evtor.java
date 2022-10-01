@@ -1,76 +1,65 @@
 package com.yhy.evtor;
 
-import com.yhy.evtor.cache.Caches;
-import com.yhy.evtor.emitter.Emitter;
-import com.yhy.evtor.manager.ObserverManager;
+import android.os.Handler;
+import android.os.Looper;
+
+import com.yhy.evtor.annotation.Subscribe;
+import com.yhy.evtor.utils.ReflectionUtils;
+
+import java.util.List;
 
 /**
- * author : 颜洪毅
- * e-mail : yhyzgn@gmail.com
- * time   : 2019-03-13 22:07
- * version: 1.0.0
- * desc   : 事件总线
+ * 事件总线对外接口
+ * <p>
+ * Created on 2022-10-01 22:49
+ *
+ * @author 颜洪毅
+ * @version 1.0.0
+ * @since 1.0.0
  */
-public class Evtor {
+public abstract class Evtor {
+    public final static Evtor instance = new Evtor() {
+    };
 
-    private static volatile Evtor evtor;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Evtor() {
-        if (null != evtor) {
-            throw new UnsupportedOperationException("Singleton class can not be instantiated.");
-        }
     }
 
-    /**
-     * 获取单例实例
-     *
-     * @return 事件总线对象
-     */
-    public static Evtor evtor() {
-        if (null == evtor) {
-            synchronized (Evtor.class) {
-                if (null == evtor) {
-                    evtor = new Evtor();
+    public void register(Object target) {
+        ReflectionUtils.doMethodWith(target.getClass(), Subscribe.class, (clazz, method) -> {
+            if (method.isAnnotationPresent(Subscribe.class)) {
+                Subscribe subscribe = method.getAnnotation(Subscribe.class);
+                if (null != subscribe) {
+                    String[] names = subscribe.value();
+                    if (names.length == 0) {
+                        names = new String[]{method.getName()};
+                    }
+                    for (String name : names) {
+                        Observer obs = new Observer()
+                                .setClazz(clazz)
+                                .setMethod(method)
+                                .setName(name)
+                                .setTarget(target)
+                                .setBroadcast(subscribe.broadcast());
+                        Registry.instance.register(obs);
+                    }
                 }
             }
-        }
-        return evtor;
+        });
     }
 
-    /**
-     * 注册事件观察者
-     *
-     * @param observer 事件观察者
-     */
-    public void observe(Object observer) {
-        ObserverManager.manager().observe(observer);
+    public void unregister(Object target) {
+        Registry.instance.unregister(target);
     }
 
-    /**
-     * 注销事件观察者
-     *
-     * @param observer 时间观察者
-     */
-    public void cancel(Object observer) {
-        ObserverManager.manager().cancel(observer);
+    public Emiter subscribe(String name) {
+        List<Observer> observerList = Registry.instance.observerList(name);
+        return Emiter.with(observerList);
     }
 
-    /**
-     * 获取广播事件发射器
-     *
-     * @return 事件发射器
-     */
-    public Emitter subscribe() {
-        return subscribe(Caches.instance().getSubscriberBroadcast());
-    }
-
-    /**
-     * 获取订阅者事件发射器
-     *
-     * @param subscriber 接收事件的订阅者名称
-     * @return 事件发射器
-     */
-    public Emitter subscribe(String subscriber) {
-        return Caches.instance().getEmitter(subscriber);
+    public Emiter broadcast() {
+        List<Observer> broadcastList = Registry.instance.broadcastList();
+        return Emiter.with(broadcastList);
     }
 }

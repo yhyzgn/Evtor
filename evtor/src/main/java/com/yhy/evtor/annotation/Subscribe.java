@@ -8,33 +8,31 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * author : 颜洪毅
- * e-mail : yhyzgn@gmail.com
- * time   : 2019-03-13 22:04
- * version: 1.0.0
- * desc   : 订阅事件接受者
+ * 事件订阅
+ * <p>
+ * Created on 2022-10-01 22:19
+ *
+ * @author 颜洪毅
+ * @version 1.0.0
+ * @since 1.0.0
  */
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@Inherited
+@Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Inherited
 public @interface Subscribe {
 
     /**
-     * 订阅者..们的名称..们
+     * 订阅一个事件
      *
-     * @return 订阅者..们的名称..们
+     * @return 事件名，默认使用 {@link Subscribe} 所注解的方法名称
      */
     String[] value() default {};
 
     /**
-     * 是否是全局广播事件
-     * <p>
-     * 默认为 false
-     * <p>
-     * 如果订阅为广播事件的话，value 值将被忽略
+     * 是否接收广播事件
      *
-     * @return 是否是广播事件
+     * @return 是否接收广播事件¬
      */
     boolean broadcast() default false;
 }

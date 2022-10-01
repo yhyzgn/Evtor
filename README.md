@@ -56,14 +56,14 @@
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             // 注册观察者
-            Evtor.evtor().observe(this);
+            Evtor.instance.observe(this);
         }
     
         @Override
         protected void onDestroy() {
             super.onDestroy();
             // 注销观察者
-            Evtor.evtor().cancel(this);
+            Evtor.instance.cancel(this);
         }
     }
     ```
@@ -174,7 +174,7 @@
         public void onClick(View v) {
             // 发送到单订阅者“single”，发送的数据为“single-data”
             // 空参数和一个参数的订阅者“single”均能收到消息
-            Evtor.evtor().subscribe("single").emit("single-data");
+            Evtor.instance.subscribe("single").emit("single-data");
         }
     });
     
@@ -182,7 +182,7 @@
         @Override
         public void onClick(View v) {
             // 发送到默认订阅者“defSingle”，发送的数据为“defSingle-data”
-            Evtor.evtor().subscribe("defSingle").emit("defSingle-data");
+            Evtor.instance.subscribe("defSingle").emit("defSingle-data");
         }
     });
     
@@ -193,7 +193,7 @@
             // 如：发送 multi-2-data 到 订阅者 “multi-2”
             // 此时所有订阅了“multi-2”的订阅者都能收到消息，包括这样的单订阅者
             String subscriber = "multi-" + (new Random().nextInt(2) + 1);
-            Evtor.evtor().subscribe(subscriber).emit(subscriber + "-data");
+            Evtor.instance.subscribe(subscriber).emit(subscriber + "-data");
         }
     });
     ```
