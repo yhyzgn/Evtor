@@ -1,8 +1,5 @@
 package com.yhy.evtor;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.yhy.evtor.annotation.Subscribe;
 import com.yhy.evtor.utils.ReflectionUtils;
 
@@ -20,8 +17,6 @@ import java.util.List;
 public abstract class Evtor {
     public final static Evtor instance = new Evtor() {
     };
-
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Evtor() {
     }

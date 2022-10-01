@@ -1,6 +1,7 @@
 package com.yhy.evtor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +46,13 @@ public abstract class Registry {
     synchronized void register(Observer observer) {
         List<Observer> observerList = targetObserverListMap.get(observer.getTarget());
         if (null == observerList) {
-            observerList = new ArrayList<>();
+            observerList = Collections.synchronizedList(new ArrayList<>());
         }
         observerList.add(observer);
 
         List<Observer> targetList = nameObserverListMap.get(observer.getName());
         if (null == targetList) {
-            targetList = new ArrayList<>();
+            targetList = Collections.synchronizedList(new ArrayList<>());
         }
         targetList.add(observer);
 
@@ -61,7 +62,7 @@ public abstract class Registry {
         if (observer.isBroadcast()) {
             List<Observer> broadcastList = nameBroadcastListMap.get(observer.getName());
             if (null == broadcastList) {
-                broadcastList = new ArrayList<>();
+                broadcastList = Collections.synchronizedList(new ArrayList<>());
             }
             broadcastList.add(observer);
             nameBroadcastListMap.put(observer.getName(), broadcastList);

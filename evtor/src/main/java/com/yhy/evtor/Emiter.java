@@ -37,8 +37,8 @@ public class Emiter {
         if (null == observerList || observerList.isEmpty()) {
             return;
         }
-        mHandler.post(() -> {
-            observerList.forEach(it -> {
+        observerList.iterator().forEachRemaining(it -> {
+            mHandler.post(() -> {
                 if (null != it && null != it.getTarget() && null != it.getMethod()) {
                     Method method = it.getMethod();
                     method.setAccessible(true);

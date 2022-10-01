@@ -25,6 +25,8 @@ public class EvtorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evtor);
 
+        Evtor.instance.register(this);
+
         TextView tvSingle = findViewById(R.id.tv_single);
         TextView tvDefSingle = findViewById(R.id.tv_def_single);
         TextView tvMulti = findViewById(R.id.tv_multi);
@@ -33,6 +35,7 @@ public class EvtorActivity extends AppCompatActivity {
         tvSingle.setOnClickListener(v -> {
             Evtor.instance.subscribe("single").emit("single-data");
             log("============================================================================================================================");
+            Evtor.instance.register(EvtorActivity.this);
         });
 
         tvDefSingle.setOnClickListener(v -> {
