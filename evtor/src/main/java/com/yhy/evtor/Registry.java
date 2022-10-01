@@ -19,13 +19,29 @@ public abstract class Registry {
     final static Registry instance = new Registry() {
     };
 
+    /**
+     * 目标对象 - 订阅者
+     */
     private final Map<Object, List<Observer>> targetObserverListMap = new HashMap<>();
+
+    /**
+     * 订阅名 - 订阅者列表
+     */
     private final Map<String, List<Observer>> nameObserverListMap = new HashMap<>();
+
+    /**
+     * 广播订阅名 - 订阅者列表
+     */
     private final Map<String, List<Observer>> nameBroadcastListMap = new HashMap<>();
 
     private Registry() {
     }
 
+    /**
+     * 注册订阅者
+     *
+     * @param observer 一个订阅者对象
+     */
     synchronized void register(Observer observer) {
         List<Observer> observerList = targetObserverListMap.get(observer.getTarget());
         if (null == observerList) {
@@ -52,6 +68,11 @@ public abstract class Registry {
         }
     }
 
+    /**
+     * 注销订阅者
+     *
+     * @param target 当前订阅者
+     */
     synchronized void unregister(Object target) {
         List<Observer> observerList = targetObserverListMap.get(target);
         if (null != observerList && !observerList.isEmpty()) {
@@ -92,10 +113,21 @@ public abstract class Registry {
         }
     }
 
+    /**
+     * 按订阅名获取订阅者列表
+     *
+     * @param name 订阅名
+     * @return 订阅者列表
+     */
     List<Observer> observerList(String name) {
         return nameObserverListMap.get(name);
     }
 
+    /**
+     * 获取广播订阅者列表
+     *
+     * @return 广播订阅者列表
+     */
     List<Observer> broadcastList() {
         return nameBroadcastListMap.entrySet().stream().flatMap(it -> it.getValue().stream()).collect(Collectors.toList());
     }

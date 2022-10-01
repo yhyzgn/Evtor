@@ -53,11 +53,22 @@ public abstract class Evtor {
         Registry.instance.unregister(target);
     }
 
+    /**
+     * 获取订阅者事件执行器
+     *
+     * @param name 订阅者名称
+     * @return 事件执行器
+     */
     public Emiter subscribe(String name) {
         List<Observer> observerList = Registry.instance.observerList(name);
         return Emiter.with(observerList);
     }
 
+    /**
+     * 获取广播执行器
+     *
+     * @return 广播事件执行器
+     */
     public Emiter broadcast() {
         List<Observer> broadcastList = Registry.instance.broadcastList();
         return Emiter.with(broadcastList);

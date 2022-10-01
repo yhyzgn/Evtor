@@ -28,6 +28,11 @@ public class Emiter {
         this.observerList = observerList;
     }
 
+    /**
+     * 执行具体事件
+     *
+     * @param parameters 参数列表
+     */
     public void emit(Object... parameters) {
         if (null == observerList || observerList.isEmpty()) {
             return;
@@ -56,10 +61,15 @@ public class Emiter {
         });
     }
 
-    public static Emiter with(List<Observer> observerList) {
-        return new Emiter(observerList);
-    }
-
+    /**
+     * 对齐参数（实参）列表
+     * <p>
+     * 形参与实参对齐（目前仅实现数量上对齐，未对类型进行匹配）
+     *
+     * @param method     方法
+     * @param parameters 实参列表
+     * @return 对齐后的实参列表
+     */
     private Object[] alignParameters(Method method, Object[] parameters) {
         Type[] types = method.getGenericParameterTypes();
         if (types.length == 0) {
@@ -87,5 +97,15 @@ public class Emiter {
         }
         // 刚刚好
         return parameters;
+    }
+
+    /**
+     * 创建一个事件发射器
+     *
+     * @param observerList 事件订阅者
+     * @return 发射器对象
+     */
+    public static Emiter with(List<Observer> observerList) {
+        return new Emiter(observerList);
     }
 }
